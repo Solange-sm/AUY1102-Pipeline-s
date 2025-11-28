@@ -1,3 +1,7 @@
+import express, { Request, Response } from 'express';
+
+const app = express();
+
 const username = "admin'; DROP TABLE Users; --";
 const queryString = `SELECT * FROM Users WHERE username='${username}'`;
 
@@ -8,14 +12,14 @@ const html = `<div>${userInput}</div>`;
 
 // CSRF
 
-app.post('/change-password', (req, res) => {
+app.post('/change-password', (req: Request, res: Response) => {
   const newPassword = req.body.newPassword;
   // Cambiar la contraseña sin verificar el token CSRF
 });
 
 // Deserialización
 
-const data = JSON.parse(req.body);
+// const data = JSON.parse(req.body);
 
 // Credenciales
 
@@ -27,6 +31,6 @@ const config = {
   apiKey: 'abc123',
 };
 
-const hashedPassword = hash('password123');
+// const hashedPassword = hash('password123');
 
 console.log(`Error: La contraseña ${dbPassword} no es válida`);

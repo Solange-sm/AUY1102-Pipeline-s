@@ -113,7 +113,10 @@
     "node": ">=14"
   },
   "dependencies": {
+    "@types/express": "^5.0.5",
+    "body-parser": "^2.2.1",
     "chokidar": "^2.0.3",
-    "cosmiconfig": "^6.0.0"
+    "cosmiconfig": "^6.0.0",
+    "express": "^5.1.0"
   }
 }
