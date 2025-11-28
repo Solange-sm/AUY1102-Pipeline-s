@@ -94,7 +94,7 @@ jobs:
     needs: publish
     runs-on: ubuntu-latest
     steps:
-      - name: Docker Scout
+      - name: Docker Scout CVE Scan
         uses: docker/scout-action@v1
         with:
           command: cves
