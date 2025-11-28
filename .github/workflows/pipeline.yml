@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, develop ]
   pull_request:
     branches: [ main ]
 
@@ -18,6 +18,7 @@ jobs:
 
       - name: Run Unit Tests
         run: docker run --rm auy1102-pipeline:test npm run test:unit
+        
 
   sonarcloud:
     needs: build-and-test
@@ -33,7 +34,7 @@ jobs:
           args: >
             -Dsonar.organization=solange-sm
             -Dsonar.projectKey=Solange-sm_AUY1102-Pipeline-s
-            -Dsonar.branch.name=master
+            -Dsonar.branch.name=${{ github.ref_name }}
             -Dsonar.sources=src
             -Dsonar.tests=test
             -Dsonar.test.inclusions=**/*.test.ts,**/*.spec.ts
@@ -55,22 +56,28 @@ jobs:
         with:
           command: test
 
-  codeql:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript
-      - name: Install Node.js Dependencies
-        run: npm install # PASO AGREGADO: Instalar dependencias
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+codeql:
+  needs: build-and-test
+  runs-on: ubuntu-latest
+  permissions:
+    security-events: write
+  steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+
+    - name: Install Node.js Dependencies
+      run: npm install
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
 
   publish:
     needs: [build-and-test, sonarcloud, snyk, codeql]
