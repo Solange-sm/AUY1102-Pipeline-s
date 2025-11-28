@@ -1,98 +1,103 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [ master, develop ]
-  pull_request:
-    branches: [ main ]
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build -t auy1102-pipeline:test .
+      - name: Build Docker Image
+        run: docker build -t auy1102-pipeline:test .
 
-      - name: Run Unit Tests
-        run: docker run --rm auy1102-pipeline:test npm run test:unit
-        
-  sonarcloud:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          # Parámetros directos, sin el bloque args
-          organization: solange-sm 
-          projectKey: Solange-sm_AUY1102-Pipeline-s # CLAVE CORRECTA
-          # Argumentos adicionales que sí van en 'args'
-          args: >
-            -Dsonar.branch.name=${{ github.ref_name }}
-            -Dsonar.sources=src
-            -Dsonar.tests=test
-            -Dsonar.test.inclusions=**/*.test.ts,**/*.spec.ts
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # TOKEN VÁLIDO
+      - name: Run Unit Tests
+        run: docker run --rm auy1102-pipeline:test npm run test:unit
 
-  snyk:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Snyk Scan
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          command: test
-          args: --fail-on=critical # CORRECCIÓN: Evita que el job falle por vulnerabilidades Altas
+  sonarcloud:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  codeql:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript
-      - name: Install Node.js Dependencies
-        run: npm install # CORRECCIÓN: Instala dependencias para CodeQL
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          organization: solange-sm
+          projectKey: Solange-sm_AUY1102-Pipeline-s
+          args: >
+            -Dsonar.branch.name=${{ github.ref_name }}
+            -Dsonar.sources=src
+            -Dsonar.tests=test
+            -Dsonar.test.inclusions=**/*.test.ts,**/*.spec.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  publish:
-    needs: [build-and-test, sonarcloud, snyk, codeql]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-      - name: Build and Push Docker Image
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest
+  snyk:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-  scout:
-    needs: publish
-    runs-on: ubuntu-latest
-    steps:
-      - name: Docker Scout
-        uses: docker/scout-action@v1
-        with:
-          command: cves
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest
+      - name: Snyk Scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: --fail-on=critical
+
+  codeql:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+
+      - name: Install Node.js Dependencies
+        run: npm install
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  publish:
+    needs: [build-and-test, sonarcloud, snyk, codeql]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest
+
+  scout:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Scout
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest
