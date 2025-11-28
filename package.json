@@ -32,7 +32,7 @@
     "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/app/server/Index.ts",
     "ext": "ts, js"
   },
-  "scripts": {
+"scripts": {
     "build": "rimraf dist && tsc",
     "build:ci": "npm run build && npm run types",
     "format": "prettier 'src/**/*.[jt]s?(x)' --write",
@@ -42,13 +42,13 @@
     "prepare": "is-ci || husky install",
     "prepublishOnly": "npm run build:ci",
     "sort": "sort-package-json package.json",
-    "test:unit": "jest --passWithNoTests",
-    "test:coverage": "jest --coverage",
-    "test:dev": "jest --verbose --colors --expand --maxWorkers=50% --detectOpenHandles --errorOnDeprecated --bail",
-    "test:watch": "jest --watch --verbose --colors --expand --maxWorkers=25%",
+    "test:unit": "npx jest --passWithNoTests",
+    "test:coverage": "npx jest --coverage",
+    "test:dev": "npx jest --verbose --colors --expand --maxWorkers=50% --detectOpenHandles --errorOnDeprecated --bail",
+    "test:watch": "npx jest --watch --verbose --colors --expand --maxWorkers=25%",
     "types": "dts-bundle-generator --config dts-generator.json",
     "start": "node dist/index.js"
-  },
+    },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
