@@ -70,8 +70,6 @@ jobs:
         with:
           languages: javascript
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
 
       - name: Install Node.js Dependencies
         run: npm install
