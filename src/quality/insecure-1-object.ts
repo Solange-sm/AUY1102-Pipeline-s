@@ -1,10 +1,13 @@
 import express, { Request, Response } from 'express';
+
 import * as bodyParser from 'body-parser';
 import * as pug from 'pug';
+
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.post('/', (req: Request, res: Response) => { // Línea corregida
   // Aseguramos que req.body tenga la estructura esperada
@@ -12,6 +15,7 @@ app.post('/', (req: Request, res: Response) => { // Línea corregida
   
   // Usamos el valor, por defecto vacío si no existe
   const usernameInput = input || '';
+
 
   const template = `
 doctype html

@@ -1,3 +1,4 @@
+
 // src/quality/insecure-2-object.ts
 
 // 1. IMPORTACIONES NECESARIAS para Express, Tipos y un Hashing de ejemplo
@@ -11,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // VULNERABILIDAD: Inyección SQL
+
 const username = "admin'; DROP TABLE Users; --";
 const queryString = `SELECT * FROM Users WHERE username='${username}'`;
 
@@ -25,6 +27,7 @@ function parseData(body: any) {
   const data = JSON.parse(body); 
   return data;
 }
+
 
 // VULNERABILIDAD: CSRF (Cross-Site Request Forgery)
 // Tipamos la función (req: Request, res: Response) para que compile
@@ -52,8 +55,10 @@ app.post('/change-password', (req: Request, res: Response) => {
 
   // Lógica de la ruta
   res.send('Contraseña cambiada (sin verificar CSRF).');
+
 });
 
 
 // PARA QUE EL ARCHIVO NO SEA CONSIDERADO UN SCRIPT GLOBAL (TS1208)
 export {};
+
