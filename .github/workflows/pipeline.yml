@@ -29,11 +29,10 @@ jobs:
           fetch-depth: 0
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
-        with:
         organization: solange-sm # Nombre de tu organización en SonarCloud
         projectKey: 7da4573505de1d6f9dff73719380b49100b54611
 
-    env:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
