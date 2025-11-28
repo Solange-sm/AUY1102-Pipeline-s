@@ -31,7 +31,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           args: >
-            -Dsonar.organization=Solange-sm
+            -Dsonar.organization=solange-sm
             -Dsonar.projectKey=solange-sm_AUY1102-Pipeline-s
             -Dsonar.sources=src
             -Dsonar.tests=test
