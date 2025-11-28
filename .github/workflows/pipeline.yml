@@ -29,15 +29,15 @@ jobs:
           fetch-depth: 0
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
-        with: # <--- ¡Añadir este bloque para las propiedades!
-          organization: Solange-sm # Alineado con 'with:'
-          projectKey: 7da4573505de1d6f9dff73719380b49100b54611 # Alineado con 'with:'
-          # Opcional: Recomendado para definir rutas
+        with:
           args: >
+            -Dsonar.organization=Solange-sm
+            -Dsonar.projectKey=7da4573505de1d6f9dff73719380b49100b54611
             -Dsonar.sources=src
             -Dsonar.tests=test
             -Dsonar.test.inclusions=**/*.test.ts,**/*.spec.ts
-        env: # <--- Alineado correctamente con 'uses:' y 'with:'
+          projectBaseDir: . # Si lo necesitas, puedes especificar la base aquí, pero el punto es el valor por defecto
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
