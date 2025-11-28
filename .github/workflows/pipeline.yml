@@ -32,7 +32,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=Solange-sm
-            -Dsonar.projectKey=7da4573505de1d6f9dff73719380b49100b54611
+            -Dsonar.projectKey=solange-sm_AUY1102-Pipeline-s
             -Dsonar.sources=src
             -Dsonar.tests=test
             -Dsonar.test.inclusions=**/*.test.ts,**/*.spec.ts
