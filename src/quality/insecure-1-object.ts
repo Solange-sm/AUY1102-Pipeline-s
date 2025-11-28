@@ -34,6 +34,5 @@ body
   const html = fn();
   res.send(html);
 });
-
 // Nota: Asegúrate de que el puerto se defina y se escuche
 // app.listen(3000, () => { console.log('Server running on port 3000'); });

@@ -61,4 +61,3 @@ app.post('/change-password', (req: Request, res: Response) => {
 
 // PARA QUE EL ARCHIVO NO SEA CONSIDERADO UN SCRIPT GLOBAL (TS1208)
 export {};
-
