@@ -56,28 +56,28 @@ jobs:
         with:
           command: test
 
-codeql:
-  needs: build-and-test
-  runs-on: ubuntu-latest
-  permissions:
-    security-events: write
-  steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+  codeql:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: javascript
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
 
-    - name: Install Node.js Dependencies
-      run: npm install
+      - name: Install Node.js Dependencies
+        run: npm install
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
 
   publish:
     needs: [build-and-test, sonarcloud, snyk, codeql]
