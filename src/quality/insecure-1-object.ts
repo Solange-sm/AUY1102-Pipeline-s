@@ -1,4 +1,4 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
 const bodyParser = require('body-parser');
 const pug = require('pug');
 
@@ -6,7 +6,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/', (req, res) => {
+app.post('/', (req: Request, res: Response) => {
   const input = req.body.username;
   const template = `
 doctype

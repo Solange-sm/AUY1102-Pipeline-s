@@ -3,7 +3,7 @@ const value = 10;
 const resultadoFinal = value * 2;
 
 // Adaptabilidad
-const message: string = 10;
+const message: string = "10";
 
 // Responsabilidad
 
@@ -12,3 +12,5 @@ class UserService {
 
   sendEmail() {}
 }
+
+export {};
