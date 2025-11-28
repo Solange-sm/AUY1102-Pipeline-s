@@ -87,8 +87,8 @@ jobs:
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/app-test:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/app-test:latest
 
   scout:
     needs: publish
@@ -98,4 +98,4 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: cves
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/app-test:latest
