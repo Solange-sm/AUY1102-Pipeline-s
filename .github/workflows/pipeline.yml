@@ -2,11 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-<<<<<<< HEAD
-    branches: [ develop ]
-=======
     branches: [ master, develop ]
->>>>>>> master
   pull_request:
     branches: [ main ]
 
