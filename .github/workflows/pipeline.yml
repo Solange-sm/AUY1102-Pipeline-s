@@ -87,6 +87,8 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: cves
-
           image: ${{ secrets.DOCKERHUB_USERNAME }}/app-test:latest
+        env: 
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
 
