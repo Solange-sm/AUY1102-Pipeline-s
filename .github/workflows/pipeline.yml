@@ -92,3 +92,4 @@ jobs:
         with:
           command: cves
           image: ${{ secrets.DOCKERHUB_USERNAME }}/auy1102-pipeline:latest
+          
