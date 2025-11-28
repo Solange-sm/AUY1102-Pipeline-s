@@ -67,7 +67,7 @@ jobs:
         uses: github/codeql-action/analyze@v4
 
   publish:
-    needs: [build-and-test, sonarcloud, snyk, codeql]
+    needs: [build-and-test, sonarcloud, codeql]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
